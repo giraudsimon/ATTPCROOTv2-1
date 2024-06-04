@@ -4,6 +4,9 @@
 #include <Rtypes.h>
 #include <TString.h>
 
+#include <TCanvas.h>
+#include <TH1D.h>
+
 #include "S800Ana.h"
 // FAIRROOT classes
 #include <FairTask.h>
@@ -43,6 +46,9 @@ public:
    void SetMTDCXfRange(std::vector<Double_t> vec);
    void SetATTPCClock(Bool_t value = kTRUE);
    void SetATTPCClockFreq(Double_t value);
+   void ShowTSDiagnostic(Bool_t value = kFALSE);
+
+   void diagnosticPlotStyle(Int_t plotId);
 
    Int_t GetS800TsSize();
    Int_t GetMergedTsSize();
@@ -71,9 +77,15 @@ private:
    std::vector<Double_t> fMTDCObjRange;
    std::vector<Double_t> fMTDCXfRange;
 
+   // std::vector<Long64_t> fATTPCTs;
+   // std::vector<Double_t> fATTPCEvt;
+
    TF1 *fS800TsFunc{};
    Double_t fGlom{2};
    Double_t fATTPCClockFreq{};
+
+   TFile *diagFile;
+   TCanvas *diagCanvas;
 
    std::vector<TString> fcutPID1File;
    std::vector<TString> fcutPID2File;
@@ -81,10 +93,17 @@ private:
 
    Bool_t fIsPersistence{false};
    Bool_t fUseATTPCClock{false};
+   Bool_t fShowTSDiagnostic{false};
 
    S800Ana fS800Ana;
 
    TGraph *fS800TsGraph{};
+   TGraph *fATTPCTsGraph = nullptr;
+   TGraph *fATTPCandS800TsGraph = nullptr;
+   TGraph *fdiffTsGraph = nullptr;
+   TH1D   *fdiffTsHist = nullptr;
+
+   std::vector<TString> plotNames; 
 
    ClassDef(AtMergeTask, 1);
 };
